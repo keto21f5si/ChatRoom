@@ -37,13 +37,13 @@ npm install
 **開発用**
 
 ```bash
-npm run start
+npm run dev
 ```
 
 **本番用**
 
 ```bash
-npm run dev
+npm run start
 ```
 
 3000番のポートでチャットアプリが動きます。
