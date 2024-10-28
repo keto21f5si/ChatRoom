@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="keto" />
+    <title>ChatRoom</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: monospace, serif;
+      }
+      html {
+        overflow-wrap: anywhere;
+      }
+      body {
+        background-color: #ffe;
+        color: #222;
+      }
+      h1 {
+        font-size: 43px;
+        text-align: center;
+      }
+      h2 {
+        font-size: 30px;
+        margin: 10px;
+        text-align: center;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        font-size: 18px;
+        justify-content: space-between;
+        text-align: left;
+        align-items: center;
+        padding: 10px;
+        border-radius: 7px;
+        background-color: #eed;
+        margin: 10px 20px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #eed;
+        border-radius: 5px;
+        box-shadow: 0 0 10px #0005;
+      }
+      input {
+        font-size: 18px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: calc(infinity * 1px);
+      }
+      input:focus {
+        outline: 2px solid #0f58;
+      }
+      button {
+        font-size: 18px;
+        padding: 10px;
+        background-color: #0c5;
+        color: #fff;
+        border: none;
+        border-radius: calc(infinity * 1px);
+        cursor: pointer;
+        transition-duration: 0.3s;
+      }
+      button:focus {
+        background-color: #0a0;
+      }
+      strong {
+        background-color: #0f5;
+        color: #000;
+        font-size: 20px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      p {
+        font-size: 18px;
+      }
+      small {
+        font-size: 16px;
+        color: #555;
+      }
+      input[inert] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ChatRoom</h1>
+    <ul id="messages"></ul>
+    <form id="form">
+      <input type="text" id="input" placeholder="YOUR_MESSAGE" />
+      <small>※ 100以内</small>
+      <button>SEND</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket = io();
+      let audio = new Audio("./sound.mp3");
+
+      let usr = prompt("ユーザー名を15文字以内で入力してください。");
+      if (usr === null) {
+        alert("無効なユーザー名");
+        usr = "匿名";
+      } else if (usr == "" || usr.length > 15) {
+        alert("無効なユーザー名");
+        usr = "匿名";
+      }
+
+      const messages = document.getElementById("messages");
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+
+      socket.emit("eSend", {
+        user: usr,
+        message: "こんにちは。"
+      })
+      
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (input.value && input.value.length <= 100) {
+          socket.emit("eSend", {
+            "user": usr,
+            "message": input.value
+          });
+          input.value = "";
+        }
+      });
+
+      socket.on("eSend", (msg) => {
+        let item = document.createElement("li");
+        let user = document.createElement("strong");
+        let text = document.createElement("span");
+        user.innerText = msg["user"];
+        text.innerText = " > " + msg["message"];
+        item.appendChild(user);
+        item.appendChild(text);
+        audio.play();
+        messages.appendChild(item);
+      });
+    </script>
+  </body>
+</html>
