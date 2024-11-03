@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="keto" />
+    <link rel="manifest" href="./manifest.json" />
     <title>ChatRoom</title>
     <style>
       * {
@@ -104,6 +105,12 @@
       <small>※ 100以内</small>
       <button>SEND</button>
     </form>
+    <script>
+      "serviceWorker" in navigator &&
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js");
+        });
+    </script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       let socket = io();
