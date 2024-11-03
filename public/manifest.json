@@ -1,0 +1,14 @@
+{
+  "name": "ChatRoom",
+  "short_name": "ketoCH",
+  "display": "standalone",
+  "background_color": "#ffe",
+  "start_url": "./index.html",
+  "icons": [
+    {
+      "src": "https://keto21.f5.si/icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
